@@ -1,0 +1,12 @@
+*.xlsx
+*.csv
+*.rds
+*.otf
+.Rhistory
+.RData
+.Rproj.user/
+*.pdf
+*.png
+*.docx
+*.xls
+.RDataTmp*
