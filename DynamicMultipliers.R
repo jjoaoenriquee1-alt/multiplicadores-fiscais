@@ -1,6 +1,10 @@
 # ============================================================
 # Fiscal multipliers in Brazil (1997-2019) - paper figures
 # 1) Monthly tvVAR  2) Quarterly tvVAR  3) Quarterly TVAR (regimes)
+# 4) Correlation of the social multiplier with social variables
+#
+# Run with the working directory set to the repository folder
+# (the folder that contains this script and the data files).
 # ============================================================
 
 library(tvReg)
@@ -12,14 +16,26 @@ library(showtext)
 library(tseries)
 library(writexl)
 
-setwd("C:/Users/jjoao/OneDrive/Desktop/Multiplicadores")
+# In RStudio, move to the script's folder automatically
+if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
+  p_script <- tryCatch(rstudioapi::getSourceEditorContext()$path, error = function(e) "")
+  if (nzchar(p_script)) setwd(dirname(p_script))
+}
+stopifnot("Data files not found: set the working directory to the repository folder" =
+            file.exists("dadosBRFDesagreg.xlsx"))
 
-FONT <- "MenaGrotesk"
-font_add(FONT,
-         regular    = "C:/Users/jjoao/Downloads/Mena Grotesk Book.otf",
-         bold       = "C:/Users/jjoao/Downloads/Mena Grotesk Bold.otf",
-         italic     = "C:/Users/jjoao/Downloads/Mena Grotesk Book Italic.otf",
-         bolditalic = "C:/Users/jjoao/Downloads/Mena Grotesk Bold Italic.otf")
+# Font: Mena Grotesk if its .otf files are in ./fonts, otherwise the default sans
+font_dir   <- "fonts"
+font_files <- file.path(font_dir, c("Mena Grotesk Book.otf", "Mena Grotesk Bold.otf",
+                                    "Mena Grotesk Book Italic.otf", "Mena Grotesk Bold Italic.otf"))
+if (all(file.exists(font_files))) {
+  FONT <- "MenaGrotesk"
+  font_add(FONT, regular = font_files[1], bold = font_files[2],
+           italic = font_files[3], bolditalic = font_files[4])
+} else {
+  FONT <- "sans"
+  message("Mena Grotesk not found in ./fonts - using the default sans font.")
+}
 showtext_auto()
 
 # ------------------------------------------------------------
@@ -577,4 +593,3 @@ for (s in ord) {
          cex = 0.7, inset = c(0.01, -0.2), y.intersp = 0.5, xpd = NA)
 }
 par(mfrow = c(1, 1))
-
